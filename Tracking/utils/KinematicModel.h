@@ -1,9 +1,3 @@
-//
-// Created by chh3213 on 2022/11/24.
-//
-
-#ifndef CHHROBOTICS_CPP_KINEMATICMODEL_H
-#define CHHROBOTICS_CPP_KINEMATICMODEL_H
 #include <iostream>
 #include <vector>
 #include <cmath>
@@ -28,5 +22,3 @@ public:
 
 };
 
-
-#endif //CHHROBOTICS_CPP_KINEMATICMODEL_H

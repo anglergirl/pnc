@@ -21,7 +21,7 @@ double calTargetIndex(vector<double> robot_state, vector<vector<double>> refer_P
 }
 
 int main() {
-    vector<vector<double>> refer_path(1000, vector<double>(2));
+    vector<vector<double>> refer_path(1000, vector<double>(2));  //1000个 (x, y)点
     vector<double> refer_x, refer_y;
 
     //生成参考轨迹
@@ -33,10 +33,10 @@ int main() {
     }
 
     //运动学模型
-    KinematicNodel ugv(0, -1, 0.5, 2, 2, 0.1);
+    KinematicNodel ugv(0, -1, 0.5, 2, 2, 0.1);  // x y 偏航角 速度 轴距 采样时间
 
     //PID控制器
-    PID_controller PID(2, 0.01, 30, 0., PI/6, -PI/6);
+    PID_controller PID(2, 0.01, 30, 0., PI/6, -PI/6);  //ki kp kd target upper lower
     //保存机器人运动过程轨迹
     vector<double> x_, y_;
     //机器人状态
@@ -49,8 +49,9 @@ int main() {
         robot_state[1] = ugv.y;
 
         //参考博客中公式
+        //机器人当前位置与参考线的最短距离
         double min_ind = calTargetIndex(robot_state, refer_path);
-        double alpha = atan2(refer_path[min_ind][1] - robot_state[1], refer_path[min_ind][1] - robot_state[0]);
+        double alpha = atan2(refer_path[min_ind][1] - robot_state[1], refer_path[min_ind][0] - robot_state[0]);
         double l_d = sqrt(pow(refer_path[min_ind][0] - robot_state[0], 2) + pow(refer_path[min_ind][1] - robot_state[1], 2));
         double theta_e = alpha - ugv.psi;
         double e_y = -l_d * sin(theta_e);

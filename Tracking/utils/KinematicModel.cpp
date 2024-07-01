@@ -1,7 +1,3 @@
-//
-// Created by chh3213 on 2022/11/24.
-//
-
 #include "KinematicModel.h"
 /**
  * 机器人运动学模型构造
