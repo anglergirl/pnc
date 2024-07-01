@@ -54,8 +54,8 @@ int main() {
         double alpha = atan2(refer_path[min_ind][1] - robot_state[1], refer_path[min_ind][0] - robot_state[0]);
         double l_d = sqrt(pow(refer_path[min_ind][0] - robot_state[0], 2) + pow(refer_path[min_ind][1] - robot_state[1], 2));
         double theta_e = alpha - ugv.psi;
-        double e_y = -l_d * sin(theta_e);
-        double delta_f = PID.calOutput(e_y);
+        double e_y = -l_d * sin(theta_e); //横向偏差距离
+        double delta_f = PID.calOutput(e_y); //将横向偏差距离添加到PID中，进行调整
 
         //更新机器人状态
         ugv.updateState(0, delta_f);
