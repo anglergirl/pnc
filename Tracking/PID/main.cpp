@@ -1,7 +1,24 @@
+#include<iostream>
 #include "PID_controller.h"
-#include <algorithm>
-
+#include "../utils/KinematicModel.h"
+#include "../../matplotlibcpp.h"
+namespace plt = matplotlibcpp;
 #define PI 3.1415926
+
+/**
+ * 得到距离参考轨迹最近点的下标
+ * @param robot_state 机器人状态（x,y）
+ * @param refer_path  参考路径
+ * @return 距离参考轨迹最近点的下标
+ */
+double calTargetIndex(vector<double> robot_state, vector<vector<double>> refer_Path) {
+    vector<double> dists;
+    for(vector<double>xy : refer_path) {
+        double dist = sqrt(pow(xy[0] - robot_state[0], 2) + pow(xy[1] - robot_state[1], 2));
+        dists.push_back(dis);
+    }
+    return min_element(dists.begin(), dists.end()) - dists.begin();
+}
 
 int main() {
     vector<vector<double>> refer_path(1000, vector<double>(2));
@@ -27,6 +44,30 @@ int main() {
 
     //运行500个回合
     for(int = 0; i < 500; i++) {
-        
+        plt::clf();
+        robot_state[0] = ugv.x;
+        robot_state[1] = ugv.y;
+
+        //参考博客中公式
+        double min_ind = calTargetIndex(robot_state, refer_path);
+        double alpha = atan2(refer_path[min_ind][1] - robot_state[1], refer_path[min_ind][1] - robot_state[0]);
+        double l_d = sqrt(pow(refer_path[min_ind][0] - robot_state[0], 2) + pow(refer_path[min_ind][1] - robot_state[1], 2));
+        double theta_e = alpha - ugv.psi;
+        double e_y = -l_d * sin(theta_e);
+        double delta_f = PID.calOutput(e_y);
+
+        //更新机器人状态
+        ugv.updateState(0, delta_f);
+        x_.push_back(ugv.x);
+        y_.push_back(ugv.y);
+
+        //画图
+        plt::plot(refer_x, refer_y, "b--");
+        plt::plot(x_, y_, "r");
+        plt::grid(true);
+        plt::ylim(-2.5, 2.5);
+        plt::pause(0.01);
     }
+
+    return 0;
 }
