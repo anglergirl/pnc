@@ -84,4 +84,22 @@ int RRT::getNearestNodeIndex(vector<Node*> node_list, RRT::Node* rnd_node) {
   return min_index;
 }
 
+void RRT::setBegin(RRT::Node* begin) {
+         RRT::begin = begin;
+}
 
+void RRT::setAnEnd(RRT::Node* anEnd) {
+         RRT::end = anEnd;
+}
+
+/*
+计算(x,y)距离目标点的距离
+@param x
+@param y
+@return
+*/
+double RRT::calDistToGoal(double x, double y) {
+         double dx = x - end->x;
+         double dy = y - end->y;
+         return sqrt(pow(dx, 2) + pow(dy, 2));
+}
