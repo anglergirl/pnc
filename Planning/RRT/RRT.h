@@ -21,5 +21,36 @@ class RRT{
       Node(double x, double y);
       Node* parent;
       double cost;
-    }
+    };
+
+  public:
+    vector<vector<double>> obstacle_list   //障碍物位置列表
+    vector<double> rand_area, play_area;   //采样区域x,y属于min, max 。约束随机树的范围[xmin, xmax,ymin, ymax]
+    double robot_radius;    //机器人半径
+    double expand_dis;      //扩展的步长
+    double goal_sample_rate;  //采样目标点的概率
+    vector<Node*> node_list_;
+    Node* begin;
+    Node* end;
+
+    int max_iter;
+
+
+    public:
+      RRT(const vector<vector<double>>& obstacleList, const vector<double>& randArea, const vector<double>& playArea, double robotRadius,
+          double expandDis, double goalSampleRate, int maxIter);
+      vector<double> calDistanceAngle(Node* from_node, Node* to_node);   //计算两个节点之间的距离和方位角
+      bool obstacleFree(Node* node);   //判断是否有障碍物
+      bool isInsidePlayArea(Node* node);  //判断是否在可行区域里边
+
+      int getNearestNodeIndex(vector<Node*> node_list, Node* rnd_node);   //计算最近节点
+      Node* sampleFree();   //采样生成节点
+      double calDistToGoal(double x, double y);  //计算(x,y)离目标点的距离
+      pair<vector<double>, vector<double>> generateFinalCourse(double goal_ind);  //生成路径 画图
+
+      Node* steer(Node* from_node, Node* to_node, double extend_length = numeric_limits<double>::max());  //连线方向扩展固定步长查找x_new
+      pair<vector<double>, vector<double>> planning();
+      void setBegin(NOde* begin);
+      void plotCircle(double x, double y, double size, string color = "b");  //画圆
+      void draw(Node* node = nullptr);
 }
